@@ -1,0 +1,102 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"datadog-agent"},"rules":[{"apiGroups":[""],"resources":["services","events","endpoints","pods","nodes","componentstatuses"],"verbs":["get","list","watch"]},{"apiGroups":["quota.openshift.io"],"resources":["clusterresourcequotas"],"verbs":["get","list"]},{"apiGroups":[""],"resourceNames":["datadogtoken","datadog-leader-election"],"resources":["configmaps"],"verbs":["get","update"]},{"apiGroups":[""],"resources":["configmaps"],"verbs":["create"]},{"nonResourceURLs":["/version","/healthz","/metrics"],"verbs":["get"]},{"apiGroups":[""],"resources":["nodes/metrics","nodes/spec","nodes/proxy","nodes/stats"],"verbs":["get"]}]}
+  creationTimestamp: "2020-06-03T10:05:14Z"
+  name: datadog-agent
+  resourceVersion: "88073094"
+  selfLink: /apis/rbac.authorization.k8s.io/v1/clusterroles/datadog-agent
+  uid: a6ff0f84-73f2-43b2-92e0-419f5bce86a0
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  - events
+  - endpoints
+  - pods
+  - nodes
+  - componentstatuses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - quota.openshift.io
+  resources:
+  - clusterresourcequotas
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - ""
+  resourceNames:
+  - datadogtoken
+  - datadog-leader-election
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+- nonResourceURLs:
+  - /version
+  - /healthz
+  - /metrics
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - nodes/metrics
+  - nodes/spec
+  - nodes/proxy
+  - nodes/stats
+  verbs:
+  - get
+
+  ---
+
+  apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRoleBinding","metadata":{"annotations":{},"name":"datadog-agent"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"ClusterRole","name":"datadog-agent"},"subjects":[{"kind":"ServiceAccount","name":"datadog-agent","namespace":"datadog-monitoring"}]}
+  creationTimestamp: "2020-06-03T10:05:14Z"
+  name: datadog-agent
+  resourceVersion: "3274903"
+  selfLink: /apis/rbac.authorization.k8s.io/v1/clusterrolebindings/datadog-agent
+  uid: f87d3e39-6f07-4c13-8178-4324b60e6362
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: datadog-agent
+subjects:
+- kind: ServiceAccount
+  name: datadog-agent
+  namespace: datadog-monitoring
+
+  ---
+
+  apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"ServiceAccount","metadata":{"annotations":{},"name":"datadog-agent","namespace":"datadog-monitoring"}}
+  creationTimestamp: "2020-06-03T10:05:14Z"
+  name: datadog-agent
+  namespace: datadog-monitoring
+  resourceVersion: "3274905"
+  selfLink: /api/v1/namespaces/datadog-monitoring/serviceaccounts/datadog-agent
+  uid: 9e23c4c0-7c91-48e7-87b8-87b0aff62b56
+secrets:
+- name: datadog-agent-token-gcxjt

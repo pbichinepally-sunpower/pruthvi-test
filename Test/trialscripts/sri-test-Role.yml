@@ -1,0 +1,80 @@
+# kind: Role
+# apiVersion: rbac.authorization.k8s.io/v1beta1
+# metadata:
+#   name: sri-test-role
+#   namespace: sri-sandbox
+# rules:
+#   - apiGroups:
+#       - ""
+#       - "apps"
+#       - "batch"
+#       - "extensions"
+#     resources:
+#       # - "configmaps"
+#       # - "cronjobs"
+#       # - "deployments"
+#       # - "events"
+#       # - "ingresses"
+#       # - "jobs"
+#       # - "pods"
+#       # - "pods/attach"
+#       # - "pods/exec"
+#       # - "pods/log"
+#       # - "pods/portforward"
+#       # - "secrets"
+#       # - "services"
+#       # - "ServiceAccount"
+#       - '*'
+#     verbs:
+#       - "create"
+#       - "delete"
+#       - "describe"
+#       - "get"
+#       - "list"
+#       - "patch"
+#       - "update"
+
+# ---
+
+# kind: RoleBinding
+# apiVersion: rbac.authorization.k8s.io/v1beta1
+# metadata:
+#   name: sri-test-rolebinding
+#   namespace: sri-sandbox
+# subjects:
+# - apiGroup: rbac.authorization.k8s.io
+#   kind: Group
+#   name: namespacegroup
+# roleRef:
+#   kind: Role
+#   name: sri-test-role
+#   apiGroup: rbac.authorization.k8s.io
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: sri-sandbox # Substitute your own namespace but for test, I have given demo namespace
+  name: test-role
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: test-rolebinding
+  namespace: sri-sandbox # This only grants permissions within the “demo” namespace.
+subjects:
+- kind: User
+  name: ssukhi # Name is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: anaik # Name is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: test-role
+  apiGroup: rbac.authorization.k8s.io

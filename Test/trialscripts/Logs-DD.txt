@@ -1,0 +1,123 @@
+When DD-44545.yml is applied:
+
+    Problem: The Netwrok Logs are flowing but the regualar DD logs arent flowing
+
+API status:
+    API Keys status
+    ===============
+      API key ending with 8a7c7: API Key valid
+  
+    ==========
+    Endpoints
+    ==========
+      https://app.datadoghq.com - API Key ending with:
+          - 8a7c7  
+
+LOGS:
+
+    datadog-agent : 
+        2021-02-22 21:43:32 UTC | SYS-PROBE | ERROR | (cmd/system-probe/loader.go:39 in Register) | new module `network_tracer` error: system-probe unsupported: debugfs is not mounted and is needed for eBPF-based checks, run "sudo mount -t debugfs none /sys/kernel/debug" to mount debugfs
+        2021-02-22 21:43:33 UTC | CORE | ERROR | (pkg/autodiscovery/listeners/kubelet.go:122 in func1) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:43:36 UTC | SYS-PROBE | ERROR | (cmd/system-probe/loader.go:39 in Register) | new module `network_tracer` error: system-probe unsupported: debugfs is not mounted and is needed for eBPF-based checks, run "sudo mount -t debugfs none /sys/kernel/debug" to mount debugfs
+        2021-02-22 21:43:38 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:43:38 UTC | CORE | ERROR | (pkg/autodiscovery/config_poller.go:123 in collect) | Unable to collect configurations from provider kubernetes: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:43:38 UTC | CORE | ERROR | (pkg/autodiscovery/listeners/kubelet.go:122 in func1) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:43:41 UTC | CORE | ERROR | (pkg/collector/runner/runner.go:292 in work) | Error running check kubelet: [{"message": "'NoneType' object is not subscriptable", "traceback": "Traceback (most recent call last):\n  File \"/opt/datadog-agent/embedded/lib/python3.8/site-packages/datadog_checks/base/checks/base.py\", line 876, in run\n    self.check(instance)\n  File \"/opt/datadog-agent/embedded/lib/python3.8/site-packages/datadog_checks/kubelet/kubelet.py\", line 336, in check\n    self.pod_tags_by_pvc = self._create_pod_tags_by_pvc(self.pod_list)\n  File \"/opt/datadog-agent/embedded/lib/python3.8/site-packages/datadog_checks/kubelet/kubelet.py\", line 253, in _create_pod_tags_by_pvc\n    for pod in pods['items']:\nTypeError: 'NoneType' object is not subscriptable\n"}]
+        2021-02-22 21:43:41 UTC | SYS-PROBE | ERROR | (cmd/system-probe/loader.go:39 in Register) | new module `network_tracer` error: system-probe unsupported: debugfs is not mounted and is needed for eBPF-based checks, run "sudo mount -t debugfs none /sys/kernel/debug" to mount debugfs
+        2021-02-22 21:43:43 UTC | CORE | ERROR | (pkg/autodiscovery/listeners/kubelet.go:122 in func1) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:43:46 UTC | SYS-PROBE | ERROR | (cmd/system-probe/loader.go:39 in Register) | new module `network_tracer` error: system-probe unsupported: debugfs is not mounted and is needed for eBPF-based checks, run "sudo mount -t debugfs none /sys/kernel/debug" to mount debugfs
+        2021-02-22 21:43:48 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:43:48 UTC | CORE | ERROR | (pkg/autodiscovery/config_poller.go:123 in collect) | Unable to collect configurations from provider kubernetes: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:43:48 UTC | CORE | ERROR | (pkg/autodiscovery/listeners/kubelet.go:122 in func1) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:43:50 UTC | SYS-PROBE | ERROR | (cmd/system-probe/loader.go:39 in Register) | new module `network_tracer` error: system-probe unsupported: debugfs is not mounted and is needed for eBPF-based checks, run "sudo mount -t debugfs none /sys/kernel/debug" to mount debugfs
+        2021-02-22 21:43:53 UTC | CORE | ERROR | (pkg/autodiscovery/listeners/kubelet.go:122 in func1) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:43:55 UTC | SYS-PROBE | ERROR | (cmd/system-probe/loader.go:39 in Register) | new module `network_tracer` error: system-probe unsupported: debugfs is not mounted and is needed for eBPF-based checks, run "sudo mount -t debugfs none /sys/kernel/debug" to mount debugfs
+        2021-02-22 21:43:56 UTC | CORE | ERROR | (pkg/collector/runner/runner.go:292 in work) | Error running check kubelet: [{"message": "'NoneType' object is not subscriptable", "traceback": "Traceback (most recent call last):\n  File \"/opt/datadog-agent/embedded/lib/python3.8/site-packages/datadog_checks/base/checks/base.py\", line 876, in run\n    self.check(instance)\n  File \"/opt/datadog-agent/embedded/lib/python3.8/site-packages/datadog_checks/kubelet/kubelet.py\", line 336, in check\n    self.pod_tags_by_pvc = self._create_pod_tags_by_pvc(self.pod_list)\n  File \"/opt/datadog-agent/embedded/lib/python3.8/site-packages/datadog_checks/kubelet/kubelet.py\", line 253, in _create_pod_tags_by_pvc\n    for pod in pods['items']:\nTypeError: 'NoneType' object is not subscriptable\n"}]
+        2021-02-22 21:43:58 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+    
+    process-agt:
+        2021-02-22 21:45:00 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:01 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:06 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:10 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:11 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:16 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:20 UTC | PROCESS | INFO | (collector.go:208 in func1) | Delivery queues: process[size=0, weight=0], pod[size=0, weight=0]
+        2021-02-22 21:45:20 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:21 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:26 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:30 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:30 UTC | PROCESS | INFO | (collector.go:160 in runCheck) | Finish container check #320 in 2.346236ms
+        2021-02-22 21:45:31 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:36 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:40 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:41 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:46 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:50 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:51 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:45:56 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:46:00 UTC | PROCESS | ERROR | (pkg/process/util/containers.go:74 in GetContainers) | Cannot list containers via kubelet: could not get pod list: unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:46:01 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+        2021-02-22 21:46:06 UTC | PROCESS | WARN | (pkg/tagger/tagger.go:209 in pull) | unexpected status code 403 on https://172.26.21.45:10250/pods: Forbidden (user=system:serviceaccount:datadog-monitoring:default, verb=get, resource=nodes, subresource=proxy)
+
+    system-probe
+
+        2021-02-22 20:52:16 UTC | SYS-PROBE | INFO | (pkg/util/log/log.go:465 in func1) | overriding API key from env DD_API_KEY value
+        2021-02-22 20:52:16 UTC | SYS-PROBE | INFO | (pkg/util/log/log.go:460 in func1) | enabling process-agent for connections check as the system-probe is enabled
+        2021-02-22 20:52:16 UTC | SYS-PROBE | INFO | (pkg/util/log/log.go:460 in func1) | network_config not found, enabling network check by default
+        2021-02-22 20:52:16 UTC | SYS-PROBE | INFO | (cmd/system-probe/main.go:88 in runAgent) | running system-probe with version: Version: 7.23.1, Git hash: 8099db17e, Git branch: HEAD, Build date: 2020-10-20T22:24:33, Go Version: 1.14.7, 
+        2021-02-22 20:52:16 UTC | SYS-PROBE | INFO | (pkg/ebpf/utils_linux.go:84 in IsTracerSupportedByOS) | running on platform: linux-4.14.181-142.260.amzn2.x86_64-x86_64-with-glibc2.2.5
+        2021-02-22 20:52:16 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:43 in func1) | Creating tracer for: system-probe
+        2021-02-22 20:52:17 UTC | SYS-PROBE | INFO | (pkg/ebpf/tracer.go:304 in runOffsetGuessing) | socket struct offset guessing complete (took 233.00792ms)
+        2021-02-22 20:52:17 UTC | SYS-PROBE | INFO | (pkg/network/port.go:96 in ReadInitialUDPState) | read UDP ports: []
+        2021-02-22 20:52:17 UTC | SYS-PROBE | INFO | (pkg/network/port.go:106 in ReadInitialUDPState) | read UDPv6 state: []
+        2021-02-22 20:52:18 UTC | SYS-PROBE | INFO | (pkg/network/netlink/conntracker.go:113 in newConntrackerOnce) | initialized conntrack with target_rate_limit=500 messages/sec
+        2021-02-22 20:52:18 UTC | SYS-PROBE | INFO | (cmd/system-probe/loader.go:50 in Register) | module: network_tracer started
+        2021-02-22 20:52:18 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/tcp_queue_tracer.go:19 in func4) | TCP queue length tracer disabled
+        2021-02-22 20:52:18 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/oom_kill_probe.go:19 in func2) | OOM kill probe disabled
+        2021-02-22 20:52:18 UTC | SYS-PROBE | INFO | (pkg/security/module/module.go:181 in NewModule) | security runtime module disabled
+        2021-02-22 20:52:18 UTC | SYS-PROBE | INFO | (cmd/system-probe/main.go:141 in runAgent) | system probe successfully started
+        2021-02-22 20:52:20 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 1): retrieved 26 connections in 784.8µs
+        2021-02-22 20:52:20 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 2): retrieved 26 connections in 819.873µs
+        2021-02-22 20:52:50 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 3): retrieved 301 connections in 1.608717ms
+        2021-02-22 20:53:20 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 4): retrieved 202 connections in 1.509597ms
+        2021-02-22 20:53:50 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 5): retrieved 216 connections in 1.234946ms
+        2021-02-22 21:01:20 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 20): retrieved 197 connections in 1.137498ms
+        2021-02-22 21:11:20 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 40): retrieved 190 connections in 1.70505ms
+        2021-02-22 21:21:20 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 60): retrieved 197 connections in 1.78124ms
+        2021-02-22 21:31:20 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 80): retrieved 194 connections in 1.283143ms
+        2021-02-22 21:41:20 UTC | SYS-PROBE | INFO | (cmd/system-probe/modules/network_tracer.go:129 in logRequests) | Got request on /connections?client_id=1 (count: 100): retrieved 186 connections in 1.403593ms
+
+
+
+
+when dd-1.yaml is applied:
+
+Logs:
+
+datadog-agent 
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  20s                default-scheduler  Successfully assigned datadog-monitoring/datadog-agent-m584z to ip-172-26-23-139.us-west-2.compute.internal
+  Warning  Failed     16s                kubelet            Error: failed to start container "datadog-agent": Error response from daemon: OCI runtime create failed: container_linux.go:349: starting container process caused "process_linux.go:449: container init caused \"rootfs_linux.go:58: mounting \\\"/sys/kernel/debug\\\" to rootfs \\\"/var/lib/docker/overlay2/eb62066cdae00fcd37c9dfe08c8418be3f43aee0ffaf9848c0ee673e81506737/merged\\\" at \\\"/var/lib/docker/overlay2/eb62066cdae00fcd37c9dfe08c8418be3f43aee0ffaf9848c0ee673e81506737/merged/sys/kernel/debug\\\\u200b\\\" caused \\\"mkdir /var/lib/docker/overlay2/eb62066cdae00fcd37c9dfe08c8418be3f43aee0ffaf9848c0ee673e81506737/merged/sys/kernel/debug\\\\u200b: read-only file system\\\"\"": unknown
+  Warning  Failed     14s                kubelet            Error: failed to start container "datadog-agent": Error response from daemon: OCI runtime create failed: container_linux.go:349: starting container process caused "process_linux.go:449: container init caused \"rootfs_linux.go:58: mounting \\\"/sys/kernel/debug\\\" to rootfs \\\"/var/lib/docker/overlay2/98aab7aa88dad34582b331d2eb6cb176b52e22b7826e90b7b6b972029da89b86/merged\\\" at \\\"/var/lib/docker/overlay2/98aab7aa88dad34582b331d2eb6cb176b52e22b7826e90b7b6b972029da89b86/merged/sys/kernel/debug\\\\u200b\\\" caused \\\"mkdir /var/lib/docker/overlay2/98aab7aa88dad34582b331d2eb6cb176b52e22b7826e90b7b6b972029da89b86/merged/sys/kernel/debug\\\\u200b: read-only file system\\\"\"": unknown
+  Normal   Pulling    10s (x2 over 20s)  kubelet            Pulling image "datadog/agent:latest"
+  Normal   Pulled     9s (x2 over 18s)   kubelet            Successfully pulled image "datadog/agent:latest"
+  Normal   Created    9s (x2 over 18s)   kubelet            Created container system-probe
+  Normal   Started    9s (x2 over 18s)   kubelet            Started container system-probe
+  Normal   Pulling    2s (x3 over 18s)   kubelet            Pulling image "datadog/agent:7"
+  Normal   Pulled     1s (x3 over 17s)   kubelet            Successfully pulled image "datadog/agent:7"
+  Normal   Created    1s (x3 over 17s)   kubelet            Created container datadog-agent
+  Warning  Failed     1s                 kubelet            Error: failed to start container "datadog-agent": Error response from daemon: OCI runtime create failed: container_linux.go:349: starting container process caused "process_linux.go:449: container init caused \"rootfs_linux.go:58: mounting \\\"/sys/kernel/debug\\\" to rootfs \\\"/var/lib/docker/overlay2/9f973626be2d87007bb45c27740d4d5742538566242889026ac4aac8f2444663/merged\\\" at \\\"/var/lib/docker/overlay2/9f973626be2d87007bb45c27740d4d5742538566242889026ac4aac8f2444663/merged/sys/kernel/debug\\\\u200b\\\" caused \\\"mkdir /var/lib/docker/overlay2/9f973626be2d87007bb45c27740d4d5742538566242889026ac4aac8f2444663/merged/sys/kernel/debug\\\\u200b: read-only file system\\\"\"": unknown
+  Warning  BackOff    0s (x4 over 9s)    kubelet            Back-off restarting failed container
+  Warning  BackOff    0s                 kubelet            Back-off restarting failed container
+
+system-probe
+2021-02-22 22:18:07 UTC | SYS-PROBE | INFO | (pkg/util/log/log.go:526 in func1) | no config exists at /etc/datadog-agent/system-probe.yaml, ignoring...
+2021-02-22 22:18:07 UTC | SYS-PROBE | INFO | (cmd/system-probe/main.go:86 in runAgent) | system probe not enabled. exiting.
+
+
+
+
+when after-edit.yaml is applies , gives us the correct datadog-agent. 

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: default
+  namespace: nightvision-qa
+imagePullSecrets:
+- name: gcr-json-key  
+secrets:
+- name: default-token-bkv6d
+  

@@ -1,0 +1,182 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: datadog-agent
+  namespace: datadog-monitoring
+spec:
+  selector:
+    matchLabels:
+      app: datadog-agent
+  template:
+    metadata:
+      labels:
+        app: datadog-agent
+      name: datadog-agent
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/system-probe: unconfined          
+    spec:
+      serviceAccountName: datadog-agent
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccountName: datadog-agent
+      terminationGracePeriodSeconds: 30  
+
+      
+      volumes:
+      - hostPath:
+          path: /var/run/docker.sock
+          type: ""
+        name: dockersocket
+      - hostPath:
+          path: /proc
+          type: ""
+        name: procdir
+      - hostPath:
+          path: /sys/fs/cgroup
+          type: ""
+        name: cgroups
+      - hostPath:
+          path: /opt/datadog-agent/run
+          type: ""
+        name: pointdir
+      - hostPath:
+          path: /sys/kernel/debug
+        name: debugfs
+      - name: sysprobe-socket-dir
+        emptyDir: {}
+      containers:
+
+      - name: system-probe
+        image: 'datadog/agent:latest'
+        imagePullPolicy: Always
+        securityContext:
+          capabilities:
+            add:
+              - SYS_ADMIN
+              - SYS_RESOURCE
+              - SYS_PTRACE
+              - NET_ADMIN
+              - IPC_LOCK
+        command:
+            - /opt/datadog-agent/embedded/bin/system-probe
+        env:
+        - name: DD_SYSPROBE_SOCKET
+          value: /var/run/sysprobe/sysprobe.sock
+        resources:
+          requests:
+            memory: 150Mi
+            cpu: 200m
+          limits:
+            memory: 150Mi
+            cpu: 200m
+        volumeMounts:
+          - name: procdir
+            mountPath: /host/proc
+            readOnly: true
+          - name: cgroups
+            mountPath: /host/sys/fs/cgroup
+            readOnly: true
+          - name: debugfs
+            mountPath: /sys/kernel/debug
+          - name: sysprobe-socket-dir
+            mountPath: /var/run/sysprobe     
+
+
+      - name: datadog-agent   
+        image: datadog/agent:7
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 0             
+        env:
+        - name: DD_SYSPROBE_SOCKET
+          value: /var/run/sysprobe/sysprobe.sock                                
+        env:
+        - name: DD_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: api-key
+              name: datadog-secret
+        - name: DD_COLLECT_KUBERNETES_EVENTS
+          value: "true"
+        - name: DD_LEADER_ELECTION
+          value: "true"
+        - name: KUBERNETES
+          value: "true"
+        - name: DD_HEALTH_PORT
+          value: "5555"
+        - name: DD_KUBERNETES_KUBELET_HOST
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        - name: DD_CLUSTER_AGENT_ENABLED
+          value: "true"
+        - name: DD_CLUSTER_AGENT_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: datadog-auth-token
+        - name: DD_APM_ENABLED
+          value: "true"
+        - name: DD_LOGS_ENABLED
+          value: "true"
+        - name: DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL
+          value: "true"
+        - name: DD_AC_EXCLUDE
+          value: name:datadog-agent
+        - name: DD_PROCESS_AGENT_ENABLED
+          value: 'true'
+        - name: DD_SYSTEM_PROBE_ENABLED
+          value: 'true'
+        - name: DD_SYSTEM_PROBE_EXTERNAL
+          value: 'true'
+        - name: DD_SYSPROBE_SOCKET
+          value: /var/run/sysprobe/sysprobe.sock          
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 5555
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 8125
+          name: dogstatsdport
+          protocol: UDP
+        - containerPort: 8126
+          name: traceport
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: dockersocket
+        - mountPath: /host/proc
+          name: procdir
+          readOnly: true
+        - mountPath: /host/sys/fs/cgroup
+          name: cgroups
+          readOnly: true
+        - mountPath: /opt/datadog-agent/run
+          name: pointdir 
+        - mountPath: /var/run/sysprobe          
+          name: sysprobe-socket-dir  
+        - mountPath: /sys/kernel/debug​   
+          name: debugfs 
+          readOnly: true
+        
+      nodeSelector:
+        disktype: ssd                

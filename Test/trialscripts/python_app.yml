@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  name: python-app-dev
+  namespace: sri-sandbox
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: python-app-dev
+      app.kubernetes.io/name: python-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: python-app-dev
+        app.kubernetes.io/name: python-app
+    spec:
+      containers:
+      - image: python
+        command: ["sh", "-c", "tail -f /dev/null"]
+        imagePullPolicy: Always
+        name: python-app
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+          - name: test-pv 
+            mountPath: /data  
+      volumes:
+        - name: test-pv
+          persistentVolumeClaim:
+            claimName: test-pvc
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: test-pvc
+spec: 
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: standard
+  # volumeClaimTemplates:
+  #   - metadata:
+  #       name: store
+  #     spec:
+  #       storageClassName: standard
+  #       accessModes: [ "ReadWriteOnce" ]
+  #       resources:
+  #         requests:
+  #            storage: 50Gi        
+

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sds-app-dev
+  namespace: sds-dev
+  labels:
+    app.kubernetes.io/name: sds-app-dev
+    app.kubernetes.io/version: "1.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: sds-app-dev
+      app.kubernetes.io/name: sds-app
+  template:
+    metadata:
+      # annotations:
+        # vault.hashicorp.com/agent-inject: 'true'
+        # vault.hashicorp.com/role: 'sds-dev'
+        # vault.hashicorp.com/agent-inject-secret-config: 'Applications/Digital/SDS/DEV'
+        # vault.hashicorp.com/agent-inject-template-config: |
+        #   {{ with secret "Applications/Digital/SDS/DEV" -}}
+        #     export ALLOW_EXTERNAL_CALLS="{{ .Data.data.ALLOW_EXTERNAL_CALLS }}"
+        #   {{- end }}
+      labels:
+        app.kubernetes.io/instance: sds-app-dev
+        app.kubernetes.io/name: sds-app
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80          

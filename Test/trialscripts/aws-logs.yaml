@@ -1,0 +1,226 @@
+TX-BICHINEPALLY:dynamic-provisioning pbichinepally$ k get daemonset ebs-csi-node -n kube-system  -o yaml
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"labels":{"app.kubernetes.io/name":"aws-ebs-csi-driver"},"name":"ebs-csi-node","namespace":"kube-system"},"spec":{"selector":{"matchLabels":{"app":"ebs-csi-node","app.kubernetes.io/name":"aws-ebs-csi-driver"}},"template":{"metadata":{"labels":{"app":"ebs-csi-node","app.kubernetes.io/name":"aws-ebs-csi-driver"}},"spec":{"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"eks.amazonaws.com/compute-type","operator":"NotIn","values":["fargate"]}]}]}}},"containers":[{"args":["node","--endpoint=$(CSI_ENDPOINT)","--logtostderr","--v=5"],"env":[{"name":"CSI_ENDPOINT","value":"unix:/csi/csi.sock"}],"image":"amazon/aws-ebs-csi-driver:latest","livenessProbe":{"failureThreshold":5,"httpGet":{"path":"/healthz","port":"healthz"},"initialDelaySeconds":10,"periodSeconds":10,"timeoutSeconds":3},"name":"ebs-plugin","ports":[{"containerPort":9808,"name":"healthz","protocol":"TCP"}],"securityContext":{"privileged":true},"volumeMounts":[{"mountPath":"/var/lib/kubelet","mountPropagation":"Bidirectional","name":"kubelet-dir"},{"mountPath":"/csi","name":"plugin-dir"},{"mountPath":"/dev","name":"device-dir"}]},{"args":["--csi-address=$(ADDRESS)","--kubelet-registration-path=$(DRIVER_REG_SOCK_PATH)","--v=5"],"env":[{"name":"ADDRESS","value":"/csi/csi.sock"},{"name":"DRIVER_REG_SOCK_PATH","value":"/var/lib/kubelet/plugins/ebs.csi.aws.com/csi.sock"}],"image":"quay.io/k8scsi/csi-node-driver-registrar:v1.1.0","lifecycle":{"preStop":{"exec":{"command":["/bin/sh","-c","rm -rf /registration/ebs.csi.aws.com-reg.sock /csi/csi.sock"]}}},"name":"node-driver-registrar","volumeMounts":[{"mountPath":"/csi","name":"plugin-dir"},{"mountPath":"/registration","name":"registration-dir"}]},{"args":["--csi-address=/csi/csi.sock"],"image":"quay.io/k8scsi/livenessprobe:v1.1.0","name":"liveness-probe","volumeMounts":[{"mountPath":"/csi","name":"plugin-dir"}]}],"hostNetwork":true,"nodeSelector":{"kubernetes.io/os":"linux"},"priorityClassName":"system-node-critical","tolerations":[{"operator":"Exists"}],"volumes":[{"hostPath":{"path":"/var/lib/kubelet","type":"Directory"},"name":"kubelet-dir"},{"hostPath":{"path":"/var/lib/kubelet/plugins/ebs.csi.aws.com/","type":"DirectoryOrCreate"},"name":"plugin-dir"},{"hostPath":{"path":"/var/lib/kubelet/plugins_registry/","type":"Directory"},"name":"registration-dir"},{"hostPath":{"path":"/dev","type":"Directory"},"name":"device-dir"}]}}}}
+  creationTimestamp: "2020-12-06T01:17:34Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/name: aws-ebs-csi-driver
+  name: ebs-csi-node
+  namespace: kube-system
+  resourceVersion: "66856295"
+  selfLink: /apis/extensions/v1beta1/namespaces/kube-system/daemonsets/ebs-csi-node
+  uid: b3dee3de-c9e8-4794-9aa0-41d66c4238d9
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ebs-csi-node
+      app.kubernetes.io/name: aws-ebs-csi-driver
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ebs-csi-node
+        app.kubernetes.io/name: aws-ebs-csi-driver
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: eks.amazonaws.com/compute-type
+                operator: NotIn
+                values:
+                - fargate
+      containers:
+      - args:
+        - node
+        - --endpoint=$(CSI_ENDPOINT)
+        - --logtostderr
+        - --v=5
+        env:
+        - name: CSI_ENDPOINT
+          value: unix:/csi/csi.sock
+        image: amazon/aws-ebs-csi-driver:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /healthz
+            port: healthz
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3
+        name: ebs-plugin
+        ports:
+        - containerPort: 9808
+          hostPort: 9808
+          name: healthz
+          protocol: TCP
+        resources: {}
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/kubelet
+          mountPropagation: Bidirectional
+          name: kubelet-dir
+        - mountPath: /csi
+          name: plugin-dir
+        - mountPath: /dev
+          name: device-dir
+      - args:
+        - --csi-address=$(ADDRESS)
+        - --kubelet-registration-path=$(DRIVER_REG_SOCK_PATH)
+        - --v=5
+        env:
+        - name: ADDRESS
+          value: /csi/csi.sock
+        - name: DRIVER_REG_SOCK_PATH
+          value: /var/lib/kubelet/plugins/ebs.csi.aws.com/csi.sock
+        image: quay.io/k8scsi/csi-node-driver-registrar:v1.1.0
+        imagePullPolicy: IfNotPresent
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - rm -rf /registration/ebs.csi.aws.com-reg.sock /csi/csi.sock
+        name: node-driver-registrar
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /csi
+          name: plugin-dir
+        - mountPath: /registration
+          name: registration-dir
+      - args:
+        - --csi-address=/csi/csi.sock
+        image: quay.io/k8scsi/livenessprobe:v1.1.0
+        imagePullPolicy: IfNotPresent
+        name: liveness-probe
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /csi
+          name: plugin-dir
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      priorityClassName: system-node-critical
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - operator: Exists
+      volumes:
+      - hostPath:
+          path: /var/lib/kubelet
+          type: Directory
+        name: kubelet-dir
+      - hostPath:
+          path: /var/lib/kubelet/plugins/ebs.csi.aws.com/
+          type: DirectoryOrCreate
+        name: plugin-dir
+      - hostPath:
+          path: /var/lib/kubelet/plugins_registry/
+          type: Directory
+        name: registration-dir
+      - hostPath:
+          path: /dev
+          type: Directory
+        name: device-dir
+  templateGeneration: 1
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+status:
+  currentNumberScheduled: 4
+  desiredNumberScheduled: 4
+  numberMisscheduled: 0
+  numberReady: 0
+  numberUnavailable: 4
+  observedGeneration: 1
+  updatedNumberScheduled: 4
+
+
+  POD logs
+
+  TX-BICHINEPALLY:dynamic-provisioning pbichinepally$ k describe po unbound-site-inverters-processor-1    
+Name:           unbound-site-inverters-processor-1
+Namespace:      nightvision-dev
+Priority:       0
+Node:           <none>
+Labels:         app.kubernetes.io/name=unbound-site-inverters-processor
+                controller-revision-hash=unbound-site-inverters-processor-f86bbcbc8
+                statefulset.kubernetes.io/pod-name=unbound-site-inverters-processor-1
+Annotations:    ad.datadoghq.com/unbound-site-inverters-processor.check_names: ["kafka"]
+                ad.datadoghq.com/unbound-site-inverters-processor.init_configs: [{"is_jmx": true, "collect_default_metrics": true}]
+                ad.datadoghq.com/unbound-site-inverters-processor.instances: [{"host": "%%host%%","port":"9012"}]
+                ad.datadoghq.com/unbound-site-inverters-processor.logs: [{"source":"java","service":"unbound-site-inverters-processor"}]
+                kubernetes.io/psp: eks.privileged
+Status:         Pending
+IP:             
+IPs:            <none>
+Controlled By:  StatefulSet/unbound-site-inverters-processor
+Containers:
+  unbound-site-inverters-processor:
+    Image:      us.gcr.io/spwr-cd-90fd/nightvision/unbound-site-inverters-processor:41448677@sha256:c8cae8f49caca96f02406123a6ffdd46a37ca6de9881b2dc7da8dd74073b2cea
+    Port:       <none>
+    Host Port:  <none>
+    Requests:
+      memory:  1Gi
+    Environment:
+      CONFLUENT_CLOUD_API_KEY:      <set to the key 'apiKey' in secret 'confluent-cloud'>     Optional: false
+      CONFLUENT_CLOUD_API_SECRET:   <set to the key 'apiSecret' in secret 'confluent-cloud'>  Optional: false
+      METRICS_HOST:                  (v1:status.hostIP)
+      KAFKA_URL:                    pkc-j53mq.us-west-2.aws.confluent.cloud:9092
+      KAFKA_ENVIRONMENT_PREFIX:     dev-
+      KAFKA_SECURITY_PROTOCOL:      SASL_SSL
+      KAFKA_REPLICATION_FACTOR:     3
+      KAFKA_STATE_DIR:              /store
+      POD_IP:                        (v1:status.podIP)
+      JDK_JAVA_OPTIONS:             -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9012 -Dcom.sun.management.jmxremote.rmi.port=9012 -Djava.rmi.server.hostname=$(POD_IP)
+      AWS_ROLE_ARN:                 arn:aws:iam::371486581282:role/dev-nightvision-EksCluste-IamRoleBasedServiceAccou-18EAUQU1M5CC4
+      AWS_WEB_IDENTITY_TOKEN_FILE:  /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    Mounts:
+      /store from store (rw)
+      /var/run/secrets/eks.amazonaws.com/serviceaccount from aws-iam-token (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-jzjbr (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False 
+Volumes:
+  aws-iam-token:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  86400
+  store:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  store-unbound-site-inverters-processor-1
+    ReadOnly:   false
+  default-token-jzjbr:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-jzjbr
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason             Age                  From                Message
+  ----     ------             ----                 ----                -------
+  Warning  FailedScheduling   49s (x18 over 5m5s)  default-scheduler   0/4 nodes are available: 4 node(s) had volume node affinity conflict.
+  Normal   NotTriggerScaleUp  1s (x31 over 5m3s)   cluster-autoscaler  pod didn't trigger scale-up (it wouldn't fit if a new node is added): 1 node(s) had volume node affinity conflict

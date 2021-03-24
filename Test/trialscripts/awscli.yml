@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: aws-cli
+spec:
+  template:
+    metadata:
+      labels:
+        app: aws-cli
+    spec:
+      serviceAccountName: default
+      containers:
+      - name: eks-iam-test
+        image: amazon/aws-cli:latest
+      restartPolicy: Never
+  backoffLimit: 0
