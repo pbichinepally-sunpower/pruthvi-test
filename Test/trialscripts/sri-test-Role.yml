@@ -56,9 +56,9 @@ metadata:
   namespace: sri-sandbox # Substitute your own namespace but for test, I have given demo namespace
   name: test-role
 rules:
-- apiGroups: [""] # "" indicates the core API group
-  resources: ["pods"]
-  verbs: ["get", "watch", "list"]
+- apiGroups: ["*"] # "" indicates the core API group
+  resources: ["*"]
+  verbs: ["*"]
 
 ---
 
