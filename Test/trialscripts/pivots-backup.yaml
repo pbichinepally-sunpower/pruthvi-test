@@ -1,0 +1,98 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "kinesis:ListStreams",
+                "dynamodb:DescribeReservedCapacityOfferings",
+                "kinesis:ListShards",
+                "dynamodb:DescribeReservedCapacity",
+                "dynamodb:PurchaseReservedCapacityOfferings",
+                "ecr:GetAuthorizationToken",
+                "eks:ListClusters",
+                "eks:DescribeCluster",
+                "kinesis:DescribeLimits",
+                "kinesis:ListStreamConsumers",
+                "dynamodb:DescribeLimits",
+                "dynamodb:ListStreams"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeContributorInsights",
+                "dynamodb:RestoreTableToPointInTime",
+                "dynamodb:ListTagsOfResource",
+                "s3:ListBucket",
+                "dynamodb:UpdateContributorInsights",
+                "dynamodb:DeleteTable",
+                "dynamodb:UpdateTableReplicaAutoScaling",
+                "dynamodb:UpdateContinuousBackups",
+                "dynamodb:DescribeTable",
+                "dynamodb:GetItem",
+                "dynamodb:DescribeContinuousBackups",
+                "dynamodb:BatchGetItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:UpdateTimeToLive",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:PutItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteTableReplica",
+                "dynamodb:DescribeTimeToLive",
+                "dynamodb:CreateTable",
+                "s3:GetObject",
+                "eks:DescribeCluster",
+                "s3:GetObjectVersion",
+                "dynamodb:UpdateTable",
+                "dynamodb:DescribeTableReplicaAutoScaling"
+            ],
+            "Resource": [
+                "arn:aws:s3:::sunpower-edp-message-archive-dev/*",
+                "arn:aws:s3:::sunpower-edp-message-archive-dev",
+                "arn:aws:dynamodb:us-west-2:371486581282:table/dev-nightvision*",
+                "arn:aws:eks:us-west-2:371486581282:cluster/dev-nightvision-EksCluster-1WFJO4DI4RB9U-EksControlPlane"
+            ]
+        },
+        {
+            "Action": [
+                "cloudwatch:PutMetricData"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "cloudwatch:namespace": "dev-nightvision-kinesis-producer"
+                }
+            },
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "CloudwatchAllAccess"
+        },
+        {
+            "Sid": "VisualEditor2",
+            "Effect": "Allow",
+            "Action": "ecr:*",
+            "Resource": "arn:aws:ecr:us-west-2:371486581282:repository/nightvision*"
+        },
+        {
+            "Sid": "VisualEditor3",
+            "Effect": "Allow",
+            "Action": "kafka:*",
+            "Resource": "arn:aws:kafka:us-west-2:371486581282:cluster/dev-nightvision-MSK-1OGIQTLCP020W-MSKCluster/fa5ccdd5-3a21-47a2-973f-6e54e875d970-2"
+        },
+        {
+            "Sid": "VisualEditor4",
+            "Effect": "Allow",
+            "Action": "kinesis:*",
+            "Resource": [
+                "arn:aws:kinesis:us-west-2:371486581282:*/dev-nightvision-*/consumer/*:*",
+                "arn:aws:kinesis:us-west-2:371486581282:stream/dev-nightvision-*"
+            ]
+        }
+    ]
+}
